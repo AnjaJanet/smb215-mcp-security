@@ -1,47 +1,57 @@
-# MCP Demo (fastmcp calculator)
+# Sécurité MCP - Projet SMB215
 
-This folder contains a small demo of `FastMCP` Python tool server, with calculator operations exposed as MCP tools.
+Ce projet contient des démonstrations de vulnérabilités de sécurité dans les serveurs MCP (Model Context Protocol). Il est organisé en deux parties principales : des exemples en environnement de développement (Non-production) et des exemples en environnement de production.
 
-## Files
+## Structure du projet
 
-- `fastmcp_calculator.py`: safe calculator; tools: `multiply`, `add` (alias), `subtract`, `divide`.
-- `fastmcp_calculator_prompt_injection.py`: same calculator but with a prompt-injection payload in docstring for testing policy/agent safety.
-- `fastmcp_calculator_tool_abuse.py`: same calculator with a tool-abuse payload in docstring for testing guardrails.
-- `pawned.txt`: artifact used in the prompt-injection samples.
+### Dossier Non-production/
+Ce dossier contient des exemples de vulnérabilités utilisant FastMCP avec une calculatrice simple.
 
-## Requirements
+- `fastmcp_calculator.py` : Calculatrice sécurisée exposant des opérations de base (multiplication, addition, soustraction, division) en tant qu'outils MCP.
+- `fastmcp_calculator_prompt_injection.py` : Version de la calculatrice avec une charge utile d'injection de prompt dans la docstring, pour tester la sécurité des agents et des politiques.
+- `fastmcp_calculator_tool_abuse.py` : Version de la calculatrice avec une charge utile d'abus d'outil dans la docstring, pour tester les garde-fous.
 
-- Python 3.11+ (3.12 is used by the local environment) 
-- `fastmcp`, `mcp` and dependencies
+### Dossier Production/
+Ce dossier contient des exemples de vulnérabilités dans un environnement simulant la production, utilisant un serveur MCP pour git et everything. 
 
-Install dependencies:
+#### Server MCP Git
+Dans ce cas, dans le dossier MCP officiel il suffit de remplacer le contenu de servers/src/git/src/mcp_server_git/server.py avec l'une des versions suivantes.
+- `server_command_injection.py` : Démonstration d'injection de commande dans le serveur git MCP.
+- `server_data_extraction.py` : Démonstration d'extraction de données sensibles via le serveur git MCP.
+- `server_name_typosquatting.py` : Démonstration de typosquatting sur les noms de serveurs MCP.
+
+### Server MCP everything
+// à venir
+
+## Prérequis
+
+- Python 3.11+ (3.12 recommandé)
+- Dépendances : `fastmcp`, `mcp` et autres listées dans `requirements.txt`
+
+## Installation
+
+Installez les dépendances avec :
 
 ```bash
-cd demo
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
-## Usage
+## Utilisation
 
-Run a demo server (STDIO transport):
+Pour exécuter un serveur de démonstration (transport STDIO) :
 
 ```bash
-cd demo
 python fastmcp_calculator.py
 ```
 
-Then send JSON messages through stdin/stdout according to MCP protocol, or use a client library that supports MCP.
+Envoyez ensuite des messages JSON via stdin/stdout selon le protocole MCP, ou utilisez une bibliothèque cliente compatible MCP.
 
-## Examples
-
-From shell (simple):
+### Exemple simple
 
 ```bash
 echo '{"query":"multiply", "args":{"a":5,"b":7}}' | python fastmcp_calculator.py
 ```
 
-If using `mcp` tool wrapper in your application, import and call like normal.
+## Note sur l'évaluation de sécurité
 
-## Note on security evaluation
-
-The `*_prompt_injection.py` and `*_tool_abuse.py` variants are intentionally crafted to test agentGuard and injection defense behavior. Do not use them in production.
+Les variantes `*_prompt_injection.py` et `*_tool_abuse.py` sont intentionnellement conçues pour tester le comportement des agents et des défenses contre les injections. **Ne les utilisez pas en production.** Ces exemples sont uniquement à des fins éducatives pour comprendre et prévenir les vulnérabilités de sécurité dans les serveurs MCP.
