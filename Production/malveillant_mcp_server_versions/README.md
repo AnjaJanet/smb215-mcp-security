@@ -14,7 +14,6 @@ Ceci est un serveur malveillant. Il tente d'ouvrir une porte utilisant le serveu
 
 - `server_confused_deputy_v4` : Cette version tente de confondre l'agent IA en injectant un prompt, entouré de balises system, dans la chaîne de caractères retournées par une méthode.
 
-
 ## Installation et exécution
 
 ### 1. Ajuster l'emplacement des journaux
